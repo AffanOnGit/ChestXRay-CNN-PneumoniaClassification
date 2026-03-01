@@ -2,6 +2,17 @@
 
 This repository contains the source code and LaTeX report for Assignment #1, focusing on classifying chest X-ray images (e.g., Pneumonia vs. Normal) using both a Custom Deep CNN and pre-trained transfer learning architectures (ResNet50, VGG16).
 
+---
+## 🛑 User Checkpoint / Next Steps (Resume Here)
+As of the last session, the **Custom CNN** has fully finished training and its precision/accuracy metrics have been natively injected into `report/Conference Paper.tex`.
+
+**When you return to this code:**
+1. Check your terminal: The `run_experiments.ps1` script should have finished training the **ResNet-50** baseline comparison model.
+2. Run the `src/evaluate.py` script on the newly generated ResNet-50 `.keras` file in `saved_models/` to extract its accuracy numbers.
+3. Paste those ResNet-50 numbers into Section V of the LaTeX report to complete the quantitative comparison.
+4. Open `notebooks/hyperparam_study.ipynb` and press "Run All" to automatically generate the hyperparameter graphs for the report.
+---
+
 ## Requirements
 - **Python 3.10** (Recommended to avoid TensorFlow compatibility issues on Windows)
 - `tensorflow>=2.10.0`
