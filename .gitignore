@@ -1,0 +1,37 @@
+# Python / Virtual Environment
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.env
+
+# Data and Models (DO NOT COMMIT)
+data/
+saved_models/
+logs/
+plots/
+*.keras
+*.h5
+
+# LaTeX Build Files
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.fls
+report/*.fdb_latexmk
+report/*.synctex.gz
+
+# IDE and OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Project specific ignores (temporary test scripts or prompt PDFs)
+Assignment#1.pdf
+read_pdf*.py
+test.py
+force_eval.py
+h5_inspect.py
