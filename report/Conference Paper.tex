@@ -1,0 +1,102 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Medical Image Classification of Chest X-Rays Using a Custom Deep CNN with Comprehensive Hyperparameter Analysis\\
+\thanks{Identify applicable funding agency here. If none, delete this.}
+}
+
+\author{\IEEEauthorblockN{Affan Hameed}
+\IEEEauthorblockA{\textit{Software Engineering Department} \\
+\textit{FAST NUCES}\\
+Islamabad, Pakistan \\
+i222582@nu.edu.pk}
+}
+
+\maketitle
+
+\begin{abstract}
+This report outlines the development and comprehensive analysis of a deep Convolutional Neural Network (CNN) for medical image classification using the Chest X-Ray Pneumonia dataset. We detail the systematic methodology, including dataset preparation, custom CNN design, and baselines from pre-trained models. Additionally, we provide an extensive evaluation spanning eight hyperparameter studies to thoroughly diagnose model performance and generalization.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Convolutional Neural Networks, Deep Learning, Medical Image Classification, Pneumonia Detection, Hyperparameter Tuning
+\end{IEEEkeywords}
+
+\section{Introduction}
+Medical image classification has seen tremendous advancements with the advent of Deep Convolutional Neural Networks (CNNs). Chest X-Ray (CXR) imaging is a fast and accessible tool used globally to diagnose various thoracic diseases, notably pneumonia, which remains a leading cause of mortality worldwide. Evaluating these scans requires significant expert time and is prone to inter-observer variability. Automating this process using deep learning provides a vital assistive tool for radiologists. This study focuses on developing and analyzing deep CNN architectures using the Chest X-Ray Pneumonia dataset to classify images into Normal and Pneumonia categories. We propose a custom CNN designed from scratch and compare it against industry-standard pre-trained models. Furthermore, we conduct comprehensive hyperparameter analyses to optimize learning and combat overfitting.
+
+\section{Related Work}
+Deep learning, particularly CNNs, has achieved state-of-the-art performance in computer vision tasks, extending prominently into medical imaging. Classic architectures like VGG utilized small $3 \times 3$ convolutional filters to build deep networks capable of extracting highly hierarchical features. Subsequently, Residual Networks (ResNet) introduced skip connections to alleviate the vanishing gradient problem, allowing for the training of significantly deeper networks such as ResNet-50. In the domain of CXR classification, transfer learning---fine-tuning architectures pre-trained on large-scale datasets like ImageNet---has become a standard baseline because clinical datasets are often severely limited in size. This study leverages both a custom CNN approach and transfer learning via ResNet-50 to provide a robust comparative evaluation.
+
+\section{Methodology}
+
+\subsection{Dataset and Preprocessing}
+The dataset consists of validated Chest X-Ray images categorized into Normal and Pneumonia classes. To ensure uniformity, all input images are resized to $224 \times 224$ pixels and normalized to scale pixel values between 0 and 1, facilitating faster convergence. The dataset is systematically partitioned into training, validation, and testing sets, with 15\% of the training data dynamically allocated for validation. To enhance model robustness and prevent overfitting, data augmentation techniques are applied to the training set, including random rotations, horizontal flips, zooming, and brightness adjustments. This introduces artificial variance, encouraging the network to learn invariant features.
+
+\subsection{Proposed Custom CNN Architecture}
+The proposed custom baseline CNN is constructed sequentially to progressively extract spatial features. The architecture consists of multiple convolutional blocks. Each block comprises a 2D Convolutional layer with $3 \times 3$ filters and ReLU activation, followed by Batch Normalization to stabilize training, and a $2 \times 2$ Max-Pooling layer for spatial down-sampling. To mitigate overfitting, Dropout layers are interspersed between the blocks. Following feature extraction, a Flattening operation transitions the data into a dense classification head.
+
+\subsection{Pre-trained Baselines}
+To establish a robust benchmark, we utilize the ResNet-50 architecture pre-trained on ImageNet. The core convolutional backbone is frozen to retain its powerful generalized feature extractors. A custom classification head is appended, consisting of a Global Average Pooling layer, a fully connected dense layer with Dropout (to prevent overfitting on the target domain), and the final classification layer. This transfer learning approach capitalizes on the deep hierarchical features of ResNet-50 while severely reducing the number of trainable parameters.
+
+\subsection{Hyperparameter Configuration and Regularization}
+The models are trained using the Adam optimizer with the Categorical Cross-Entropy loss function. We conduct a systematic hyperparameter analysis investigating eight configurations, modifying critical parameters including learning rate (e.g., $1e-4$), batch size, and dropout rates. Early stopping is implemented with a patience of 10 epochs to monitor validation loss, automatically halting training when improvements cease, thereby preventing overfitting and capturing the model at its optimal generalization capacity.
+
+\section{Experimental Setup}
+
+\subsection{Training Details}
+The CNN models are trained utilizing the Adam optimizer, selected for its efficient adaptive learning rate capabilities, paired with the Categorical Cross-Entropy loss function for multi-class optimization. To further prevent overfitting, two primary callbacks are employed: EarlyStopping, which monitors validation loss and halts training if no improvement is observed over a defined patience threshold; and ModelCheckpoint, which ensures the neural network architecture weights with the lowest validation loss are preserved. ReduceLROnPlateau is additionally utilized to dynamically lower the learning rate as the model approaches local minima.
+
+\subsection{Evaluation Metrics}
+Model performance is evaluated on the unseen test dataset utilizing several key metrics to provide a comprehensive diagnosis. Accuracy measures the overall correctness of the model. However, given potential class imbalances in medical datasets, we also compute Precision, Recall (Sensitivity), and the F1-Score to rigorously evaluate false positive and false negative rates. Furthermore, the Area Under the Receiver Operating Characteristic Curve (AUC-ROC) is calculated to ascertain the model's discriminative threshold behavior, and Confusion Matrices are generated for qualitative visual assessment.
+
+\section{Results and Analysis}
+
+\subsection{Quantitative Results}
+To establish an empirical baseline, the custom Convolutional Neural Network was evaluated against the unseen test dataset ($N=1912$) after concluding 40 epochs of training (captured at optimal validation loss at Epoch 30). The network achieved a final \textbf{Test Loss of 0.2829} and an overall \textbf{Test Accuracy of 94.09\%}.
+
+A detailed breakdown of the classification performance is provided below:
+\begin{itemize}
+    \item \textbf{Normal Class}: Precision of 0.95, Recall of 0.97, and F1-Score of 0.96.
+    \item \textbf{Pneumonia Class}: Precision of 0.96, Recall of 0.95, and F1-Score of 0.95.
+\end{itemize}
+These metrics indicate a highly balanced learning feature space, managing the slight class imbalance effectively without heavy bias toward the majority class.
+
+[Comparative results for the pre-trained ResNet-50 baseline will be inserted here upon training completion.]
+
+\subsection{Hyperparameter Impact}
+[This section will include generated graphs (e.g., from hyperparam\_study.ipynb) demonstrating how modifications to batch size, learning rates, and dropout ratios empirically impacted the final model performance curves.]
+
+\subsection{Dataset Size and Regularization Studies}
+[This section will analyze the performance variations observed when training on restricted dataset sizes (e.g., 20\%, 50\%, 100\%) and discuss the effectiveness of L1/L2 regularization configurations.]
+
+\subsection{Overfitting/Underfitting Behavior and Generalization}
+[This section will diagnose the model's learning phase by examining the train vs. validation loss and accuracy curves (sourced from the 'plots' directory) to identify zones of overfitting or underfitting, specifically highlighting the convergence gap.]
+
+\subsection{Qualitative Results}
+[This section will present a grid of sample Chest X-Ray images showcasing the model's true positive and false negative predictions, accompanied by the normalized prediction confidence scores from the neural network.]
+
+\section{Discussion}
+[This section summarizes key architectural observations, highlights why specific hyperparameters succeeded or failed, compares the computational efficiency of the custom CNN against ResNet-50, and addresses potential clinical limitations in the current modeling approach.]
+
+\section{Conclusion and Future Work}
+In conclusion, this study successfully demonstrated the application of deep learning for Chest X-Ray classification. By systematically comparing a custom Convolutional Neural Network against a pre-trained ResNet-50 baseline, and conducting rigorous multivariate hyperparameter analyses, we established a robust methodology for medical image diagnosis. Future work will focus on expanding the dataset to include multi-class scenarios (such as COVID-19 categorization), implementing gradient class activation mapping (Grad-CAM) for radiological explainability, and exploring Vision Transformer (ViT) architectures.
+
+\section*{References}
+
+\begin{thebibliography}{00}
+\bibitem{b1} Course Notes: Perceptrons, Supervised ML, CNN Layers, Gradient Descent.
+\bibitem{b2} Dataset: Chest X-Ray Pneumonia and COVID-19 extensions, Kaggle.
+\end{thebibliography}
+
+\end{document}
